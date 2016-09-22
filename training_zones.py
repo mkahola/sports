@@ -41,8 +41,13 @@ def hr_zones(max_hr):
     
     for i in range(0, len(zones)):
         n = 0.5 + i/10.0
-        print("zone %d (bpm): %3d-%3d (%s)" %
-              (i+1,int(n*float(max_hr)),int((n+0.1)*float(max_hr))-1, zones[i]))
+
+        if i < (len(zones)-1):
+            print("zone %d (bpm): %3d-%3d (%s)" %
+                  (i+1,int(n*float(max_hr)),int((n+0.1)*float(max_hr))-1, zones[i]))
+        else:
+            print("zone %d (bpm): %3d-%3d (%s)" %
+                  (i+1,int(n*float(max_hr)),int((n+0.1)*float(max_hr)), zones[i]))          
         
 def main(argv):
     
