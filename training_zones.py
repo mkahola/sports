@@ -35,19 +35,20 @@ def help():
           
 def hr_zones(max_hr):
 
-    zones = ['active recovery', 'endurance', 'tempo', 'threshold', 'VO2max']
+    zones = ['Active recovery', 'Endurance', 'Tempo', 'Threshold', 'VO2max']
     
     print("Max heartrate (bpm): %3d" % max_hr);
     
     for i in range(0, len(zones)):
         n = 0.5 + i/10.0
-
+        
         if i < (len(zones)-1):
-            print("zone %d (bpm): %3d-%3d (%s)" %
-                  (i+1,int(n*float(max_hr)),int((n+0.1)*float(max_hr))-1, zones[i]))
+            upper_limit = max_hr - 1
         else:
-            print("zone %d (bpm): %3d-%3d (%s)" %
-                  (i+1,int(n*float(max_hr)),int((n+0.1)*float(max_hr)), zones[i]))          
+            upper_limit = max_hr
+
+        print("Zone %d (bpm): %3d-%3d (%s)" %
+              (i+1,int(n*float(max_hr)),int((n+0.1)*upper_limit), zones[i]))
         
 def main(argv):
     
@@ -57,7 +58,7 @@ def main(argv):
     if argv.isnumeric():
         max_hr = int(argv)
     else:
-        print("input is not a number!")
+        print("Input is not a number!")
         help()
         return
 
@@ -69,7 +70,7 @@ def main(argv):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("max heartrate missing!")
+        print("Max heartrate missing!")
         help()
     else:
         main(sys.argv[1])
