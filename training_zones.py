@@ -28,17 +28,51 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Author: Mika Kahola <mika.kahola@kolumbus.fi>
 """
 
-import sys, getopt
+import sys, argparse
 
-def help():
-    print("Usage: hz_zones <max heartrate in bpm>\n")
-          
-def hr_zones(max_hr):
+def hr_zones_karvonen(max_hr, rest_hr):
+    
+        zones = ['Active recovery', 'Endurance', 'Tempo', 'Threshold', 'VO2max']
+
+        if max_hr is None:
+            print("Max heartrate not a number")
+            return
+
+        if rest_hr is None:
+            print("Rest heartrate not a number")
+            return
+
+        if rest_hr > max_hr:
+            print("Rest heartrate cannot be higher than max heartrate")
+            return
+        
+        hr_reserve = max_hr - rest_hr
+        
+        print("Max heartrate (bpm): %3d" % max_hr)
+        print("Rest heartrate (bpm): %2d" % rest_hr)
+        print("Heartrate reserve: %3d\n" % hr_reserve)
+        
+        for i in range(0, len(zones)):
+            n = 0.5 + i/10.0
+            
+            if i < (len(zones)-1):
+                upper_limit = hr_reserve - 1
+            else:
+                upper_limit = hr_reserve
+                
+            print("Zone %d (bpm): %3d-%3d (%s)" %
+                  (i+1,int(n*float(hr_reserve))+rest_hr,int((n+0.1)*upper_limit)+rest_hr, zones[i]))
+
+def hr_zones_max_heartrate(max_hr):
 
     zones = ['Active recovery', 'Endurance', 'Tempo', 'Threshold', 'VO2max']
     
-    print("Max heartrate (bpm): %3d" % max_hr);
-    
+    if max_hr is None:
+        print("Max heartrate not a number")
+        return
+
+    print("Max heartrate (bpm): %3d\n" % max_hr)
+
     for i in range(0, len(zones)):
         n = 0.5 + i/10.0
         
@@ -46,31 +80,25 @@ def hr_zones(max_hr):
             upper_limit = max_hr - 1
         else:
             upper_limit = max_hr
-
+            
         print("Zone %d (bpm): %3d-%3d (%s)" %
               (i+1,int(n*float(max_hr)),int((n+0.1)*upper_limit), zones[i]))
-        
+
 def main(argv):
     
-    if not argv:
-        return
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--method", choices=['max-heartrate', 'karvonen'], help="training zone method")
+    parser.add_argument("-r", "--maxhr", type=int, help="max heartrate")
+    parser.add_argument("-s", "--resthr", type=int, help="rest heartrate")
 
-    if argv.isnumeric():
-        max_hr = int(argv)
+    args = parser.parse_args()
+
+    if args.method == 'max-heartrate':
+        hr_zones_max_heartrate(args.maxhr)
+    elif args.method == 'karvonen':
+        hr_zones_karvonen(args.maxhr, args.resthr)
     else:
-        print("Input is not a number!")
-        help()
-        return
-
-    if not (100 <= max_hr <= 220):
-        print("Max heartrate not in range between 100 to 220 bpm")
-        return
-    
-    hr_zones(max_hr)
-
+        parser.print_help()
+        
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Max heartrate missing!")
-        help()
-    else:
-        main(sys.argv[1])
+        main(sys.argv[1:])
