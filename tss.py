@@ -39,6 +39,9 @@ from fitparse import FitFile, FitParseError
 from scipy.signal import lfilter
 
 def get_tss(power, duration, ftp):
+    if not power:
+        return 0, 0, 0
+
     # 30s moving average filter
     h = numpy.empty(30)
     h.fill(1.0/30)
@@ -46,8 +49,12 @@ def get_tss(power, duration, ftp):
     # power of 4 of 30s average power
     p_30s = lfilter(h, 1.0, power)**4
 
-    # average of power of 4 
-    p_avg = sum(p_30s)/float(len(p_30s))
+    # average of power of 4
+    try:
+        p_avg = sum(p_30s)/float(len(p_30s))
+    except ZeroDivisionError:
+        print("divide by zero")
+        p_avg = 0
 
     # normalized power
     NP = math.sqrt(math.sqrt(p_avg))
@@ -83,10 +90,20 @@ def main(argv):
                 power.append(data.value)
 
     p = [i for i in power if i is not None]
-    Pavg = sum(filter(None, power))/float(len(filter(None, power)))
+
+    try:
+        Pavg = sum(filter(None, power))/float(len(filter(None, power)))
+    except ZeroDivisionError:
+        print("divide by zero")
+        Pavg = 0
+
     tss, NP, IFactor = get_tss(p, len(power), args.ftp)
-    
-    print("TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, max(power)))
+    if not p:
+        Pmax = 0
+    else:
+        Pmax = max(p)
+
+    print("TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, Pmax))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
