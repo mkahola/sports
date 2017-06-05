@@ -38,7 +38,14 @@ import numpy
 from fitparse import FitFile, FitParseError
 from scipy.signal import lfilter
 
-def get_tss(power, duration, ftp):
+def get_hrTSS(hr, duration, threshold):
+
+    hr_avg = sum(hr)/float(len(hr))
+    tss = (duration * hr_avg)/(threshold * 3600.0) * 100.0
+
+    return tss
+
+def get_TSS(power, duration, ftp):
     if not power:
         return 0, 0, 0
 
@@ -70,7 +77,8 @@ def get_tss(power, duration, ftp):
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--fitfile", type=str, default="", help="FIT file")
-    parser.add_argument("-p", "--ftp",   type=int, default=287, help="FTP")
+    parser.add_argument("-p", "--ftp",   type=int, default=287, help="Functional Threshold Power")
+    parser.add_argument("-t", "--threshold", type=int, default=155, help="Heartrate threshold")
     args = parser.parse_args()
 
     try:
@@ -80,7 +88,8 @@ def main(argv):
         print "Error while parsing .FIT file: %s" % e
         sys.exit(1)
     
-    power = []    
+    power = []
+    heartrate = []
     # Get all data messages that are of type record
     for record in fitfile.get_messages('record'):
         
@@ -88,8 +97,11 @@ def main(argv):
         for data in record:
             if data.name == "power":
                 power.append(data.value)
+            if data.name == "heart_rate":
+                heartrate.append(data.value)
 
-    p = [i for i in power if i is not None]
+    p  = [i for i in power if i is not None]
+    hr = [i for i in heartrate if i is not None]
 
     try:
         Pavg = sum(filter(None, power))/float(len(filter(None, power)))
@@ -97,13 +109,15 @@ def main(argv):
         print("divide by zero")
         Pavg = 0
 
-    tss, NP, IFactor = get_tss(p, len(power), args.ftp)
+    tss, NP, IFactor = get_TSS(p, len(power), args.ftp)
     if not p:
         Pmax = 0
     else:
         Pmax = max(p)
 
-    print("TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, Pmax))
+    hr_tss = get_hrTSS(hr, len(heartrate), args.threshold)
+
+    print("hrTSS: %.1f, TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (hr_tss, tss, IFactor, NP, Pavg, Pmax))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
