@@ -41,9 +41,11 @@ from scipy.signal import lfilter
 def get_hrTSS(hr, duration, threshold):
 
     hr_avg = sum(hr)/float(len(hr))
+    hr_min = min(hr)
+    hr_max = max(hr)
     tss = (duration * hr_avg)/(threshold * 3600.0) * 100.0
 
-    return tss
+    return tss, hr_avg, hr_max, hr_min
 
 def get_TSS(power, duration, ftp):
     if not power:
@@ -115,9 +117,10 @@ def main(argv):
     else:
         Pmax = max(p)
 
-    hr_tss = get_hrTSS(hr, len(heartrate), args.threshold)
+    hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, len(heartrate), args.threshold)
 
-    print("hrTSS: %.1f, TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (hr_tss, tss, IFactor, NP, Pavg, Pmax))
+    print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, Pmax))
+    print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
