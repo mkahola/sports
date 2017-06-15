@@ -40,17 +40,20 @@ from scipy.signal import lfilter
 
 def get_hrTSS(hr, duration, threshold):
 
-    hr_prev = hr[0]
+    if not hr:
+        return 0, 0, 0, 0
 
+    hr_prev = hr[0]
+    
     for i in range(1, len(hr)):
         if abs(hr_prev - hr[i]) > 10:
             hr[i] = hr_prev
-        hr_prev = hr[i]
-
-    hr_avg = sum(hr)/float(len(hr))
-    hr_min = min(hr)
-    hr_max = max(hr)
-    tss = (duration * hr_avg)/(threshold * 3600.0) * 100.0
+            hr_prev = hr[i]
+            
+            hr_avg = sum(hr)/float(len(hr))
+            hr_min = min(hr)
+            hr_max = max(hr)
+            tss = (duration * hr_avg)/(threshold * 3600.0) * 100.0
 
     return tss, hr_avg, hr_max, hr_min
 
