@@ -38,6 +38,15 @@ import numpy
 from fitparse import FitFile, FitParseError
 from scipy.signal import lfilter
 
+def average (data):
+    try:
+        avg = sum(filter(None, data))/float(len(filter(None, data)))
+    except ZeroDivisionError:
+        print("divide by zero")
+        return 0
+
+    return avg
+
 def max_power(power, t):
     if not power:
         return 0
@@ -77,11 +86,7 @@ def get_TSS(power, duration, ftp):
     p_30s = lfilter(h, 1.0, power)**4
 
     # average of power of 4
-    try:
-        p_avg = sum(p_30s)/float(len(p_30s))
-    except ZeroDivisionError:
-        print("divide by zero")
-        p_avg = 0
+    p_avg = average(p_30s)
 
     # normalized power
     NP = math.sqrt(math.sqrt(p_avg))
@@ -129,23 +134,15 @@ def main(argv):
     c  = [i for i in cadence if i is not None]
 
     if p:
-        try:
-            Pavg = sum(filter(None, power))/float(len(filter(None, power)))
-        except ZeroDivisionError:
-            print("divide by zero")
-            Pavg = 0
-
         tss, NP, IFactor = get_TSS(p, len(power), args.ftp)
-
-        print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, max(p)))
+        print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, average(power), max(p)))
 
     if hr:
         hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, len(heartrate), args.threshold)
         print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
 
     if c:
-        c_avg = sum(filter(None, cadence))/float(len(filter(None, cadence)))
-        print("Cadence:   AVG: %d, MAX: %d" % (c_avg, max(c)))
+        print("Cadence:   AVG: %d, MAX: %d" % (average(cadence), max(c)))
 
     if p:
         print("")
