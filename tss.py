@@ -123,43 +123,39 @@ def main(argv):
     p  = [i for i in power if i is not None]
     hr = [i for i in heartrate if i is not None]
 
-    try:
-        Pavg = sum(filter(None, power))/float(len(filter(None, power)))
-    except ZeroDivisionError:
-        print("divide by zero")
-        Pavg = 0
+    if p:
+        try:
+            Pavg = sum(filter(None, power))/float(len(filter(None, power)))
+        except ZeroDivisionError:
+            print("divide by zero")
+            Pavg = 0
 
-    tss, NP, IFactor = get_TSS(p, len(power), args.ftp)
-    if not p:
-        Pmax = 0
-    else:
-        Pmax = max(p)
+        tss, NP, IFactor = get_TSS(p, len(power), args.ftp)
 
-    hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, len(heartrate), args.threshold)
+        print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, max(p)))
 
-    print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, Pmax))
-    print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
-    print("")
-    print("Max power:")
-    print("      10s: %d W" % (max_power(p, 10)))
-    print("      30s: %d W" % (max_power(p, 30)))
-    print("       1m: %d W" % (max_power(p, 1*60)))
-    print("       5m: %d W" % (max_power(p, 5*60)))
+    if hr:
+        hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, len(heartrate), args.threshold)
+        print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
 
-    if (len(p) > 10*60):
-        print("      10m: %d W" % (max_power(p, 10*60)))
+    if p:
+        print("")
+        print("Max power:")
+        print("      10s: %d W" % (max_power(p, 10)))
+        print("      30s: %d W" % (max_power(p, 30)))
+        print("       1m: %d W" % (max_power(p, 1*60)))
+        print("       5m: %d W" % (max_power(p, 5*60)))
 
-    if (len(p) > 20*60):
-        print("      20m: %d W" % (max_power(p, 20*60)))
-
-    if (len(p) > 1*60*60):
-        print("       1h: %d W" % (max_power(p, 1*60*60)))
-
-    if (len(p) > 2*60*60):
-        print("       2h: %d W" % (max_power(p, 2*60*60)))
-
-    if (len(p) > 3*60*60):
-        print("       3h: %d W" % (max_power(p, 3*60*60)))
+        if (len(p) > 10*60):
+            print("      10m: %d W" % (max_power(p, 10*60)))
+        if (len(p) > 20*60):
+            print("      20m: %d W" % (max_power(p, 20*60)))
+        if (len(p) > 1*60*60):
+            print("       1h: %d W" % (max_power(p, 1*60*60)))
+        if (len(p) > 2*60*60):
+            print("       2h: %d W" % (max_power(p, 2*60*60)))
+        if (len(p) > 3*60*60):
+            print("       3h: %d W" % (max_power(p, 3*60*60)))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
