@@ -110,6 +110,8 @@ def main(argv):
     
     power = []
     heartrate = []
+    cadence = []
+
     # Get all data messages that are of type record
     for record in fitfile.get_messages('record'):
         
@@ -119,9 +121,12 @@ def main(argv):
                 power.append(data.value)
             if data.name == "heart_rate":
                 heartrate.append(data.value)
+            if data.name == "cadence":
+                cadence.append(data.value)
 
     p  = [i for i in power if i is not None]
     hr = [i for i in heartrate if i is not None]
+    c  = [i for i in cadence if i is not None]
 
     if p:
         try:
@@ -137,6 +142,10 @@ def main(argv):
     if hr:
         hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, len(heartrate), args.threshold)
         print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
+
+    if c:
+        c_avg = sum(filter(None, cadence))/float(len(filter(None, cadence)))
+        print("Cadence:   AVG: %d, MAX: %d" % (c_avg, max(c)))
 
     if p:
         print("")
