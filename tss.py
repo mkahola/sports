@@ -38,6 +38,21 @@ import numpy
 from fitparse import FitFile, FitParseError
 from scipy.signal import lfilter
 
+def max_power(power, t):
+    if not power:
+        return 0
+
+    if len(power) < t:
+        return 0
+
+    h = numpy.empty(t)
+    h.fill(1.0/float(t))
+
+    p_max = lfilter(h, 1.0, power)
+
+    return max(p_max)
+    
+    
 def get_hrTSS(hr, duration, threshold):
 
     if not hr:
@@ -124,6 +139,27 @@ def main(argv):
 
     print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, Pavg, Pmax))
     print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
+    print("")
+    print("Max power:")
+    print("      10s: %d W" % (max_power(p, 10)))
+    print("      30s: %d W" % (max_power(p, 30)))
+    print("       1m: %d W" % (max_power(p, 1*60)))
+    print("       5m: %d W" % (max_power(p, 5*60)))
+
+    if (len(p) > 10*60):
+        print("      10m: %d W" % (max_power(p, 10*60)))
+
+    if (len(p) > 20*60):
+        print("      20m: %d W" % (max_power(p, 20*60)))
+
+    if (len(p) > 1*60*60):
+        print("       1h: %d W" % (max_power(p, 1*60*60)))
+
+    if (len(p) > 2*60*60):
+        print("       2h: %d W" % (max_power(p, 2*60*60)))
+
+    if (len(p) > 3*60*60):
+        print("       3h: %d W" % (max_power(p, 3*60*60)))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
