@@ -48,12 +48,12 @@ def compute_zones(ftp):
     z6 = 1.50*ftp
 
     print("Zone 1: %3d - %d W" % (min_pow, z1))
-    print("Zone 2: %d - %d W" % (z1, z2))
-    print("Zone 3: %d - %d W" % (z2, z3))
-    print("Zone 4: %d - %d W" % (z3, z4))
-    print("Zone 5: %d - %d W" % (z4, z5))
-    print("Zone 6: %d - %d W" % (z5, z6))
-    print("Zone 7: %d - %d W" % (z6, max_pow))
+    print("Zone 2: %d - %d W" % (z1 + 1, z2))
+    print("Zone 3: %d - %d W" % (z2 + 1, z3))
+    print("Zone 4: %d - %d W" % (z3 + 1, z4))
+    print("Zone 5: %d - %d W" % (z4 + 1, z5))
+    print("Zone 6: %d - %d W" % (z5 + 1, z6))
+    print("Zone 7: %d - %d W" % (z6 + 1, max_pow))
     print("")
 
 def main(argv):
