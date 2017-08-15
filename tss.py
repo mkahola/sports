@@ -32,6 +32,7 @@ import sys
 import argparse
 import math
 import numpy
+import datetime
 
 # requires python-fitparse library from
 # https://github.com/dtcooper/python-fitparse
@@ -116,18 +117,28 @@ def main(argv):
     power = []
     heartrate = []
     cadence = []
-
+    start = ""
+    stop = ""
     # Get all data messages that are of type record
     for record in fitfile.get_messages('record'):
         
         # Go through all the data entries in this record
         for data in record:
+            if data.name == "timestamp":
+                if not start:
+                    start = data.value
+                else:
+                    stop = data.value
+
             if data.name == "power":
                 power.append(data.value)
             if data.name == "heart_rate":
                 heartrate.append(data.value)
             if data.name == "cadence":
                 cadence.append(data.value)
+
+    duration  = stop - start
+    print("Duration: %s" % (duration))
 
     p  = [i for i in power if i is not None]
     hr = [i for i in heartrate if i is not None]
@@ -138,7 +149,7 @@ def main(argv):
         print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, average(power), max(p)))
 
     if hr:
-        hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, len(heartrate), args.threshold)
+        hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, duration.total_seconds(), args.threshold)
         print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
 
     if c:
