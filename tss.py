@@ -161,6 +161,7 @@ def main(argv):
         print("      10s: %d W" % (max_power(p, 10)))
         print("      30s: %d W" % (max_power(p, 30)))
         print("       1m: %d W" % (max_power(p, 1*60)))
+        print("       3m: %d W" % (max_power(p, 3*60)))
         print("       5m: %d W" % (max_power(p, 5*60)))
 
         if (len(p) > 10*60):
