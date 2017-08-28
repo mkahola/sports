@@ -100,11 +100,16 @@ def get_TSS(power, duration, ftp):
     
     return tss, NP, IFactor
 
+def vo2max(power, weight):
+
+    return (10.8*power/weight + 7)
+
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--fitfile", type=str, default="", help="FIT file")
     parser.add_argument("-p", "--ftp",   type=int, default=288, help="Functional Threshold Power")
     parser.add_argument("-t", "--threshold", type=int, default=155, help="Heartrate threshold")
+    parser.add_argument("-w", "--weight", type=int, default=76, help="Weight in kg")
     args = parser.parse_args()
 
     try:
@@ -156,6 +161,8 @@ def main(argv):
         print("Cadence:   AVG: %d, MAX: %d" % (average(cadence), max(c)))
 
     if p:
+        print("")
+        print("VO2max: %.2f ml/kg/min" % (vo2max(max_power(p, 5*60), args.weight)))
         print("")
         print("Max power:")
         print("      10s: %d W" % (max_power(p, 10)))
