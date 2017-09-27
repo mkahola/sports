@@ -39,6 +39,12 @@ import datetime
 from fitparse import FitFile, FitParseError
 from scipy.signal import lfilter
 
+class User():
+    def __init__(self, ftp, threshold, weight):
+        self.ftp = ftp
+        self.hr_ftp = threshold
+        self.weight = weight
+
 def average (data):
     try:
         avg = sum(filter(None, data))/float(len(filter(None, data)))
@@ -112,6 +118,8 @@ def main(argv):
     parser.add_argument("-w", "--weight", type=int, default=76, help="Weight in kg")
     args = parser.parse_args()
 
+    user = User(args.ftp, args.threshold, args.weight)
+
     try:
         fitfile = FitFile(args.fitfile)
         fitfile.parse()
@@ -150,11 +158,11 @@ def main(argv):
     c  = [i for i in cadence if i is not None]
 
     if p:
-        tss, NP, IFactor = get_TSS(p, len(power), args.ftp)
+        tss, NP, IFactor = get_TSS(p, len(power), user.ftp)
         print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, average(power), max(p)))
 
     if hr:
-        hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, duration.total_seconds(), args.threshold)
+        hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, duration.total_seconds(), user.hr_ftp)
         print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
 
     if c:
@@ -162,7 +170,7 @@ def main(argv):
 
     if p:
         print("")
-        print("VO2max: %.2f ml/kg/min" % (vo2max(max_power(p, 5*60), args.weight)))
+        print("VO2max: %.2f ml/kg/min" % (vo2max(max_power(p, 5*60), user.weight)))
         print("")
         print("Max power:")
         print("      10s: %d W" % (max_power(p, 10)))
