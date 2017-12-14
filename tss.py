@@ -66,7 +66,7 @@ def max_power(power, t):
 
     p_max = lfilter(h, 1.0, power)
 
-    return max(p_max)
+    return round(max(p_max),0)
     
     
 def get_hrTSS(hr, duration, threshold):
