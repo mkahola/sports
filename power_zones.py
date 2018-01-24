@@ -31,10 +31,10 @@ Author: Mika Kahola <mika.kahola@kolumbus.fi>
 import sys, argparse
 
 def sweetspot(ftp):
-    print("Sweetspot %d W - %d W" % (0.88*ftp, 0.93*ftp))
+    print("Sweetspot: %d W - %d W" % (0.88*ftp, 0.93*ftp))
 
 def threshold_under_overs(ftp):
-    print("Threshold under/over power: %d/%d W" % (0.9*ftp, 1.1*ftp))
+    print("Threshold\nunder/over: %d/%d W" % (0.9*ftp, 1.1*ftp))
 
 def compute_zones(ftp):
     min_pow = 0
@@ -66,7 +66,7 @@ def main(argv):
     print("FTP: %d W" % args.ftp)
     print("")
 
-    compute_zones(args.ftp);
+    compute_zones(args.ftp)
     threshold_under_overs(args.ftp)
     sweetspot(args.ftp)
 
