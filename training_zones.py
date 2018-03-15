@@ -51,7 +51,8 @@ def hr_zones_karvonen(max_hr, rest_hr):
         print("Max heartrate (bpm): %3d" % max_hr)
         print("Rest heartrate (bpm): %2d" % rest_hr)
         print("Heartrate reserve: %3d\n" % hr_reserve)
-        
+
+        print("Running:")
         for i in range(0, len(zones)):
             n = 0.5 + i/10.0
             
@@ -62,6 +63,19 @@ def hr_zones_karvonen(max_hr, rest_hr):
                 
             print("Zone %d (bpm): %3d-%3d (%s)" %
                   (i+1,int(n*float(hr_reserve))+rest_hr,int((n+0.1)*upper_limit)+rest_hr, zones[i]))
+
+        print("")
+        print("Cycling:")
+        for i in range(0, len(zones)):
+            n = 0.5 + i/10.0
+            
+            if i < (len(zones)-1):
+                upper_limit = hr_reserve - 1
+            else:
+                upper_limit = hr_reserve
+                
+            print("Zone %d (bpm): %3d-%3d (%s)" %
+                  (i+1,int(n*float(hr_reserve))+rest_hr-10,int((n+0.1)*upper_limit)+rest_hr-10, zones[i]))
 
 def hr_zones_max_heartrate(max_hr):
 
