@@ -157,13 +157,20 @@ def main(argv):
     hr = [i for i in heartrate if i is not None]
     c  = [i for i in cadence if i is not None]
 
-    if p:
-        tss, NP, IFactor = get_TSS(p, len(power), user.ftp)
-        print("Power:     TSS: %.1f, IF: %.2f, NP: %d W, AVG: %d W, MAX: %d W" % (tss, IFactor, NP, average(power), max(p)))
-
     if hr:
         hr_tss, hr_avg, hr_max, hr_min = get_hrTSS(hr, duration.total_seconds(), user.hr_ftp)
         print("Heartrate: TSS: %.1f, AVG: %d, MAX: %d, MIN: %d" % (hr_tss, hr_avg, hr_max, hr_min))
+
+    if p:
+        tss, NP, IFactor = get_TSS(p, len(power), user.ftp)
+        print("Power:     TSS: %.1f" % (tss))
+        print("            IF: %.2f" % (IFactor))
+        print("            NP: %d W" % (NP))
+        print("           AVG: %d W" % (average(power)))
+        print("           MAX: %d W" % (max(p)))
+
+        if hr:
+            print("         NP:HR: %.2f" % (NP/hr_avg))
 
     if c:
         print("Cadence:   AVG: %d, MAX: %d" % (average(cadence), max(c)))
