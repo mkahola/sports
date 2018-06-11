@@ -132,6 +132,8 @@ def main(argv):
     cadence = []
     start = ""
     stop = ""
+    distance = 0
+
     # Get all data messages that are of type record
     for record in fitfile.get_messages('record'):
         
@@ -149,9 +151,13 @@ def main(argv):
                 heartrate.append(data.value)
             if data.name == "cadence":
                 cadence.append(data.value)
+            if data.name == "distance":
+                if data.value != None:
+                    distance = data.value
 
     duration  = stop - start
     print("Duration: %s" % (duration))
+    print("Distance: %.2f km" % (distance/1000.0))
 
     p  = [i for i in power if i is not None]
     hr = [i for i in heartrate if i is not None]
