@@ -59,7 +59,7 @@ def compute_zones(ftp):
 def main(argv):
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--ftp", type=int, default=290, help="FTP power")
+    parser.add_argument("-p", "--ftp", type=int, default=276, help="FTP power")
 
     args = parser.parse_args()
 
