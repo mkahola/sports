@@ -123,8 +123,8 @@ def main(argv):
     try:
         fitfile = FitFile(args.fitfile)
         fitfile.parse()
-    except FitParseError, e:
-        print "Error while parsing .FIT file: %s" % e
+    except FitParseError:
+        print("Error while parsing .FIT file: %s" % args.fitfile)
         sys.exit(1)
     
     power = []
