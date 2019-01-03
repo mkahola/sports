@@ -37,6 +37,11 @@ def get_weight(p, max_val):
 
     return x*2.5
 
+def print_warmup(x):
+    print("\t 5x%.1f kg" % get_weight(0.40, 0.9*x))
+    print("\t 5x%.1f kg" % get_weight(0.50, 0.9*x))
+    print("\t 3x%.1f kg" % get_weight(0.65, 0.9*x))
+
 def main(args):
     parser = argparse.ArgumentParser()
     parser.add_argument("-w", "--weight", type=float, default=120, help="max weight in kg")
@@ -46,16 +51,19 @@ def main(args):
     print("1RM: %.1f kg\n" % (args.weight))
 
     print("week 1:")
+    print_warmup(args.weight)
     print("\t 5x%.1f kg" % get_weight(0.65, 0.9*args.weight))
     print("\t 5x%.1f kg" % get_weight(0.75, 0.9*args.weight))
     print("\t 5x%.1f kg" % get_weight(0.85, 0.9*args.weight))
 
     print("week 2:")
+    print_warmup(args.weight)
     print("\t 3x%.1f kg" % get_weight(0.70, 0.9*args.weight))
     print("\t 3x%.1f kg" % get_weight(0.80, 0.9*args.weight))
     print("\t 3x%.1f kg" % get_weight(0.90, 0.9*args.weight))
 
     print("week 3:")
+    print_warmup(args.weight)
     print("\t 5x%.1f kg" % get_weight(0.75, 0.9*args.weight))
     print("\t 3x%.1f kg" % get_weight(0.85, 0.9*args.weight))
     print("\t 1x%.1f kg" % get_weight(0.95, 0.9*args.weight))
@@ -64,11 +72,6 @@ def main(args):
     print("\t 5x%.1f kg" % get_weight(0.40, 0.9*args.weight))
     print("\t 5x%.1f kg" % get_weight(0.50, 0.9*args.weight))
     print("\t 5x%.1f kg" % get_weight(0.60, 0.9*args.weight))
-
-    print("warmup:")
-    print("\t 5x%.1f kg" % get_weight(0.40, 0.9*args.weight))
-    print("\t 5x%.1f kg" % get_weight(0.50, 0.9*args.weight))
-    print("\t 3x%.1f kg" % get_weight(0.65, 0.9*args.weight))
     
 if __name__ == "__main__":
     main(sys.argv[1:])
