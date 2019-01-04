@@ -31,9 +31,10 @@ Author: Mika Kahola <mika.kahola@kolumbus.fi>
 "System 5/3/1 weight computation"
 
 import sys, argparse
+import math
 
 def get_weight(p, max_val):
-    x = int(((p*max_val)/2.5 + 0.5))
+    x = math.ceil(p*max_val/2.5)
 
     return x*2.5
 
