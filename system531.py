@@ -45,7 +45,7 @@ def print_warmup(x):
 
 def main(args):
     parser = argparse.ArgumentParser()
-    parser.add_argument("-w", "--weight", type=float, default=120, help="max weight in kg")
+    parser.add_argument("-w", "--weight", type=float, default=120, help="1RM in kg")
 
     args = parser.parse_args()
 
