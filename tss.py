@@ -115,7 +115,7 @@ def main(argv):
     parser.add_argument("-f", "--fitfile", type=str, default="", help="FIT file")
     parser.add_argument("-p", "--ftp",   type=int, default=276, help="Functional Threshold Power")
     parser.add_argument("-t", "--threshold", type=int, default=155, help="Heartrate threshold")
-    parser.add_argument("-w", "--weight", type=int, default=78, help="Weight in kg")
+    parser.add_argument("-w", "--weight", type=float, default=82.5, help="Weight in kg")
     args = parser.parse_args()
 
     user = User(args.ftp, args.threshold, args.weight)
