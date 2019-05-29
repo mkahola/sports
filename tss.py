@@ -114,7 +114,7 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--fitfile", type=str, default="", help="FIT file")
     parser.add_argument("-p", "--ftp",   type=int, default=276, help="Functional Threshold Power")
-    parser.add_argument("-t", "--threshold", type=int, default=155, help="Heartrate threshold")
+    parser.add_argument("-t", "--threshold", type=int, default=158, help="Heartrate threshold")
     parser.add_argument("-w", "--weight", type=float, default=82.5, help="Weight in kg")
     args = parser.parse_args()
 
