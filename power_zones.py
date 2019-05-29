@@ -36,37 +36,46 @@ def sweetspot(ftp):
 def threshold_under_overs(ftp):
     print("Threshold\nunder/over: %d/%d W" % (0.9*ftp, 1.1*ftp))
 
-def compute_zones(ftp):
+def compute_zones(ftp, lthr):
     min_pow = 0
     max_pow = 2000
     
-    z1 = 0.56*ftp
-    z2 = 0.76*ftp
-    z3 = 0.91*ftp
-    z4 = 1.06*ftp
-    z5 = 1.21*ftp
-    z6 = 1.50*ftp
+    z1_p = 0.56*ftp
+    z2_p = 0.76*ftp
+    z3_p = 0.91*ftp
+    z4_p = 1.06*ftp
+    z5_p = 1.21*ftp
+    z6_p = 1.50*ftp
 
-    print("Zone 1: %3d - %d W" % (min_pow, z1))
-    print("Zone 2: %d - %d W" % (z1 + 1, z2))
-    print("Zone 3: %d - %d W" % (z2 + 1, z3))
-    print("Zone 4: %d - %d W" % (z3 + 1, z4))
-    print("Zone 5: %d - %d W" % (z4 + 1, z5))
-    print("Zone 6: %d - %d W" % (z5 + 1, z6))
-    print("Zone 7: %d - %d W" % (z6 + 1, max_pow))
+    z1_hr = 0.81*lthr
+    z2_hr = 0.86*lthr
+    z3_hr = 0.93*lthr
+    z4_hr = 0.99*lthr
+    z5_hr = 1.00*lthr
+    z6_hr = 1.06*lthr
+
+    print("Zone 1: %3d - %d W,     - %d bpm" % (min_pow, z1_p, z1_hr))
+    print("Zone 2: %d - %d W, %d - %d bpm" % (z1_p + 1, z2_p, z1_hr + 1, z2_hr))
+    print("Zone 3: %d - %d W, %d - %d bpm" % (z2_p + 1, z3_p, z2_hr + 1, z3_hr))
+    print("Zone 4: %d - %d W, %d - %d bpm" % (z3_p + 1, z4_p, z3_hr + 1, z4_hr))
+    print("Zone 5: %d - %d W, %d - %d bpm" % (z4_p + 1, z5_p, z4_hr + 1, z5_hr))
+    print("Zone 6: %d - %d W, %d - %d bpm" % (z5_p + 1, z6_p, z5_hr + 1, z6_hr))
+    print("Zone 7: >%d W, >%d bpm" % (z6_p + 1, z6_hr + 1))
     print("")
 
 def main(argv):
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--ftp", type=int, default=276, help="FTP power")
+    parser.add_argument("-r", "--lthr", type=int, default=158, help="Lactate threshold HR")
 
     args = parser.parse_args()
 
     print("FTP: %d W" % args.ftp)
+    print("LTHR: %d bpm" % args.lthr)
     print("")
 
-    compute_zones(args.ftp)
+    compute_zones(args.ftp, args.lthr)
     threshold_under_overs(args.ftp)
     sweetspot(args.ftp)
 
