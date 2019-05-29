@@ -186,6 +186,7 @@ def main(argv):
         print("VO2max: %.2f ml/kg/min" % (vo2max(max_power(p, 5*60), user.weight)))
         print("")
         print("Max power:")
+        print("     peak: %d W" % (max(p)))
         print("      10s: %d W" % (max_power(p, 10)))
         print("      30s: %d W" % (max_power(p, 30)))
         print("       1m: %d W" % (max_power(p, 1*60)))
