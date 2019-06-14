@@ -66,7 +66,7 @@ def compute_zones(ftp, lthr):
 def main(argv):
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--ftp", type=int, default=276, help="FTP power")
+    parser.add_argument("-p", "--ftp", type=int, default=290, help="FTP power")
     parser.add_argument("-r", "--lthr", type=int, default=158, help="Lactate threshold HR")
 
     args = parser.parse_args()
