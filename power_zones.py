@@ -31,7 +31,7 @@ Author: Mika Kahola <mika.kahola@kolumbus.fi>
 import sys, argparse
 
 def sweetspot(ftp):
-    print("Sweetspot: %d W - %d W" % (0.88*ftp, 0.93*ftp))
+    print("Sweetspot: %d W - %d W (88%% - 93%%)" % (0.88*ftp, 0.93*ftp))
 
 def threshold_under_overs(ftp):
     print("Threshold\nunder/over: %d/%d W" % (0.9*ftp, 1.1*ftp))
@@ -54,13 +54,13 @@ def compute_zones(ftp, lthr):
     z5_hr = 1.00*lthr
     z6_hr = 1.06*lthr
 
-    print("Zone 1: %3d - %d W,     - %d bpm" % (min_pow, z1_p, z1_hr))
-    print("Zone 2: %d - %d W, %d - %d bpm" % (z1_p + 1, z2_p, z1_hr + 1, z2_hr))
-    print("Zone 3: %d - %d W, %d - %d bpm" % (z2_p + 1, z3_p, z2_hr + 1, z3_hr))
-    print("Zone 4: %d - %d W, %d - %d bpm" % (z3_p + 1, z4_p, z3_hr + 1, z4_hr))
-    print("Zone 5: %d - %d W, %d - %d bpm" % (z4_p + 1, z5_p, z4_hr + 1, z5_hr))
-    print("Zone 6: %d - %d W, %d - %d bpm" % (z5_p + 1, z6_p, z5_hr + 1, z6_hr))
-    print("Zone 7: >%d W, >%d bpm" % (z6_p + 1, z6_hr + 1))
+    print("Zone 1: %3d - %d W (     <55%%),     - %d bpm" % (min_pow, z1_p, z1_hr))
+    print("Zone 2: %d - %d W (55%% - 75%%), %d - %d bpm" % (z1_p + 1, z2_p, z1_hr + 1, z2_hr))
+    print("Zone 3: %d - %d W (76%% - 90%%), %d - %d bpm" % (z2_p + 1, z3_p, z2_hr + 1, z3_hr))
+    print("Zone 4: %d - %d W (91%% - 105%%), %d - %d bpm" % (z3_p + 1, z4_p, z3_hr + 1, z4_hr))
+    print("Zone 5: %d - %d W (106%% - 120%%), %d - %d bpm" % (z4_p + 1, z5_p, z4_hr + 1, z5_hr))
+    print("Zone 6: %d - %d W (121%% - 150%%), %d - %d bpm" % (z5_p + 1, z6_p, z5_hr + 1, z6_hr))
+    print("Zone 7: >%d W (>150%%), >%d bpm" % (z6_p + 1, z6_hr + 1))
     print("")
 
 def main(argv):
